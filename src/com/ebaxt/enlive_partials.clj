@@ -26,10 +26,10 @@
       (html-resource resource)
       (throw (Exception. (format "Template doesn't exist: %s" path))))))
 
-(defn- html-body [name]
+(defn- html-unwrapped [name]
   (-> name
       find-html-resource
-      (select [:body])
+      (select [#{:body :head}])
       first
       :content))
 
@@ -39,7 +39,7 @@
            includes (seq includes)]
       (if includes
         (let [file (-> (first includes) :attrs :file)
-              include (construct-html (html-body file))]
+              include (construct-html (html-unwrapped file))]
           (recur (transform h [[:_include (attr= :file file)]] (substitute include))
                  (next includes)))
         h))))
