@@ -20,7 +20,7 @@
 
 (defn- find-html-resource [file]
   (let [file (.replaceAll file "^/" "")
-        path (str *template-path* "/" file)
+        path (if *template-path* (str *template-path* "/" file) file)
         resource (io/resource path)]
     (if resource
       (html-resource resource)
